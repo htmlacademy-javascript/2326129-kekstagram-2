@@ -12,7 +12,7 @@ function getNumbers(string = '') {
   const str = String(string);
   let result = '';
   for(const sign of str) {
-    if(sign >= '0' && sign <= '9') {
+    if(!isNaN(parseInt(sign, 10))) {
       result += sign;
     }
   }
