@@ -18,3 +18,5 @@ function getNumbers(string = '') {
   }
   return parseInt(result, 10);
 }
+
+export {checkLengthString, isPalindrome, getNumbers};
