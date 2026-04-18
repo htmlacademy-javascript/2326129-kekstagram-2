@@ -1,4 +1,4 @@
-function constData() {
+export function constData() {
 
   const MESSAGES = [
     'Всё отлично!',
@@ -24,5 +24,3 @@ function constData() {
   ];
   return {MESSAGES, NAMES};
 }
-
-export {constData};

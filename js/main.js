@@ -1,7 +1,7 @@
 import { getRandomElement, getRandomNumber } from './utils';
 import {constData} from './data';
 
-const {NAMES, MESSAGES} = constData;
+const {NAMES, MESSAGES} = constData();
 
 const PHOTO_AMOUNT = 25;
 
@@ -30,15 +30,13 @@ function getComment() {
 }
 
 function getPhoto() {
-  const commentsAmount = Math.floor(Math.random() * (Comments.MAX - Comments.MIN + 1) + Comments.MIN);
-  const likesAmount = Math.floor(Math.random() * (Likes.MAX - Likes.MIN + 1) + Likes.MIN);
   let photoId = 1;
   return () => ({
     id: photoId++,
     url: `photos/${photoId - 1}.jpg`,
     description: `${photoId - 1} photo`,
-    likes: likesAmount,
-    comments: Array.from({length: commentsAmount}, getComment())
+    likes: Math.floor(Math.random() * (Likes.MAX - Likes.MIN + 1) + Likes.MIN),
+    comments: Array.from({length: Math.floor(Math.random() * (Comments.MAX - Comments.MIN + 1) + Comments.MIN)}, getComment())
   });
 }
 
