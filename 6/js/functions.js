@@ -19,16 +19,16 @@ function getNumbers(string = '') {
   return parseInt(result, 10);
 }
 
+function getTimeData (time) {
+  const startWorkData = time.split(':');
+  return parseInt(startWorkData[0], 10) * 60 + parseInt(startWorkData[1], 10);
+}
+
 function isMeetOvertime(startWork, endWork, startMeet, durationMeet) {
-
-  const startWorkTime = parseInt(startWork.split(':')[0], 10) * 60 + parseInt(startWork.split(':')[1], 10);
-
-  const endWorkTime = parseInt(endWork.split(':')[0], 10) * 60 + parseInt(endWork.split(':')[1], 10);
-
-  const startMeetTime = parseInt(startMeet.split(':')[0], 10) * 60 + parseInt(startMeet.split(':')[1], 10);
-
+  const startWorkTime = getTimeData(startWork);
+  const endWorkTime = getTimeData(endWork);
+  const startMeetTime = getTimeData(startMeet);
   const endMeetTime = startMeetTime + durationMeet;
-
   return startMeetTime >= startWorkTime && endMeetTime <= endWorkTime;
 }
 
