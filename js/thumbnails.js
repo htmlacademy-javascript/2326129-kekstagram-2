@@ -4,19 +4,27 @@ const template = document.querySelector('#picture').content.querySelector('.pict
 const pictures = document.querySelector('.pictures');
 
 const generatedPhotos = getPhotos();
-const fragment = document.createDocumentFragment();
 
-generatedPhotos.forEach((photo) => {
+function createThumbnail (photo) {
   const thumbnail = template.cloneNode(true);
   const picture = thumbnail.querySelector('.picture__img');
   const likes = thumbnail.querySelector('.picture__likes');
   const comments = thumbnail.querySelector('.picture__comments');
-
   picture.src = photo.url;
   picture.alt = photo.description;
   likes.textContent = photo.likes;
   comments.textContent = photo.comments.length;
-  fragment.append(thumbnail);
-});
+  return thumbnail;
+}
 
-pictures.append(fragment);
+function createThumbnails() {
+  const fragment = document.createDocumentFragment();
+  generatedPhotos.forEach((image) => {
+    fragment.append(createThumbnail(image));
+  });
+  return fragment;
+}
+
+pictures.append(createThumbnails());
+
+export { pictures };

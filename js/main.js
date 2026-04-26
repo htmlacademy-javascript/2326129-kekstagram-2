@@ -1,4 +1,5 @@
 import { getPhotos } from './generateData';
-import './thumbnails';
+import { pictures } from './thumbnails';
 
 console.log(getPhotos());
+console.log(pictures);
