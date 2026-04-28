@@ -1,5 +1,5 @@
 import { getPhotos } from './generateData';
-import { pictures } from './thumbnails';
+import { createThumbnails } from './thumbnails';
 
-console.log(getPhotos());
-console.log(pictures);
+createThumbnails(getPhotos());
+
