@@ -22,9 +22,9 @@ function createThumbnails() {
   generatedPhotos.forEach((image) => {
     fragment.append(createThumbnail(image));
   });
-  return fragment;
+  pictures.append(fragment);
 }
 
-pictures.append(createThumbnails());
 
-export { pictures };
+
+export { createThumbnails };
