@@ -25,6 +25,4 @@ function createThumbnails() {
   pictures.append(fragment);
 }
 
-
-
 export { createThumbnails };
