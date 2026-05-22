@@ -39,7 +39,7 @@ function onFilterClick(evt) {
   currentActive.classList.remove(ACTIVE_FILTER_BUTTON);
   currentActive = targetButton;
   targetButton.classList.add(ACTIVE_FILTER_BUTTON);
-  currentFilter = targetButton.getAttribute('id');
+  currentFilter = targetButton.id;
   debounceApplyFilter();
 }
 
