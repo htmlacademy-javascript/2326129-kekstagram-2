@@ -15,7 +15,6 @@ const Method = {
 
 const ErrorText = {
   GET_DATA: 'Не удалось загрузить данные. Попробуйте обновить страницу',
-  SEND_DATA: 'Не удалось отправить форму. Попробуйте ещё раз',
   SEND_INVALID_DATA: 'Выберите подходящий файл'
 };
 
@@ -47,7 +46,7 @@ function getData(){
 }
 
 function sendData(body){
-  return load(Routes.SEND_DATA, ErrorText.SEND_DATA, Method.POST, body);
+  return load(Routes.SEND_DATA, '', Method.POST, body);
 }
 
 export { getData, sendData, showDataError, ErrorText };

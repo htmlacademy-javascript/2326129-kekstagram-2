@@ -14,7 +14,7 @@ const SubmitButtonText = {
 };
 
 const uploadForm = document.querySelector('.img-upload__form');
-const pageBody = document.body;
+const pageBody = document.querySelector('body');
 
 const uploadFileControl = uploadForm.querySelector('#upload-file');
 const photoEditorForm = uploadForm.querySelector('.img-upload__overlay');
@@ -70,22 +70,36 @@ function onDocumentKeyDown(evt) {
   }
 }
 
-function onCloseNotification(evt){
-  evt.stopPropagation();
+function onNotificationClick(evt) {
   const existElement = document.querySelector('.success') || document.querySelector('.error');
+  if (!existElement) {
+    return;
+  }
   const closeButton = existElement.querySelector('button');
-  if (evt.target === existElement || evt.target === closeButton || isEscapeKey(evt)) {
+  if (evt.target === existElement || evt.target === closeButton) {
     existElement.remove();
-    pageBody.removeEventListener('click', onCloseNotification);
-    pageBody.removeEventListener('keydown', onCloseNotification);
+    pageBody.removeEventListener('click', onNotificationClick);
+    pageBody.removeEventListener('keydown', onNotificationKeydown);
+  }
+}
+
+function onNotificationKeydown(evt) {
+  if (!isEscapeKey(evt)) {
+    return;
+  }
+  const existElement = document.querySelector('.success') || document.querySelector('.error');
+  if (existElement) {
+    existElement.remove();
+    pageBody.removeEventListener('click', onNotificationClick);
+    pageBody.removeEventListener('keydown', onNotificationKeydown);
   }
 }
 
 function appendNotification(template) {
   const notificationNode = template.cloneNode(true);
   pageBody.append(notificationNode);
-  pageBody.addEventListener('click', onCloseNotification);
-  pageBody.addEventListener('keydown', onCloseNotification);
+  pageBody.addEventListener('click', onNotificationClick);
+  pageBody.addEventListener('keydown', onNotificationKeydown);
 }
 
 const blockSubmitButton = () => {
@@ -161,7 +175,6 @@ function onFormSubmit(evt) {
         closePhotoEditorForm();
       })
       .catch(() => {
-        showDataError(ErrorText.SEND_DATA);
         appendNotification(templateError);
       })
       .finally(unblockSubmitButton);
