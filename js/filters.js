@@ -13,6 +13,7 @@ const Filters = {
 let currentFilter = Filters.DEFAULT;
 const filters = document.querySelector('.img-filters');
 let currentActive = filters.querySelector(`.${ACTIVE_FILTER_BUTTON}`);
+let currentFilterValue = Filters.DEFAULT;
 
 let pictures = [];
 let randomCache = [];
@@ -44,6 +45,9 @@ function onFilterClick(evt) {
 }
 
 function applyFilter() {
+  if (currentFilterValue === currentFilter) {
+    return;
+  }
   let filteredPictures = [];
   switch (currentFilter) {
     case Filters.DEFAULT:
@@ -58,6 +62,7 @@ function applyFilter() {
       randomCache = [];
       break;
   }
+  currentFilterValue = currentFilter;
   createThumbnails(filteredPictures);
 }
 

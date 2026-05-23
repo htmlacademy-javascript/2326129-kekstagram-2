@@ -70,28 +70,34 @@ function onDocumentKeyDown(evt) {
   }
 }
 
-function onNotificationClick(evt) {
-  const existElement = document.querySelector('.success') || document.querySelector('.error');
-  if (!existElement) {
+function getNotificationElement() {
+  return document.querySelector('.success') || document.querySelector('.error');
+}
+
+function closeNotification() {
+  const notification = getNotificationElement();
+  if (!notification) {
     return;
   }
-  const closeButton = existElement.querySelector('button');
-  if (evt.target === existElement || evt.target === closeButton) {
-    existElement.remove();
-    pageBody.removeEventListener('click', onNotificationClick);
-    pageBody.removeEventListener('keydown', onNotificationKeydown);
+  notification.remove();
+  pageBody.removeEventListener('click', onNotificationClick);
+  pageBody.removeEventListener('keydown', onNotificationKeydown);
+}
+
+function onNotificationClick(evt) {
+  const notification = getNotificationElement();
+  if (!notification) {
+    return;
+  }
+  const closeButton = notification.querySelector('button');
+  if (evt.target === notification || evt.target === closeButton) {
+    closeNotification();
   }
 }
 
 function onNotificationKeydown(evt) {
-  if (!isEscapeKey(evt)) {
-    return;
-  }
-  const existElement = document.querySelector('.success') || document.querySelector('.error');
-  if (existElement) {
-    existElement.remove();
-    pageBody.removeEventListener('click', onNotificationClick);
-    pageBody.removeEventListener('keydown', onNotificationKeydown);
+  if (isEscapeKey(evt)) {
+    closeNotification();
   }
 }
 
