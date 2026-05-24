@@ -29,7 +29,7 @@ const isHashtagValid = (value = null) => {
       error: 'Хештег должен начинаться с символа "#"'
     },
     {
-      check: hashtags.some((item, num, array) => array.includes(item, num + 1)),
+      check: hashtags.some((item, num, tags) => tags.includes(item, num + 1)),
       error: 'Хештеги не должны повторяться'
     },
     {
