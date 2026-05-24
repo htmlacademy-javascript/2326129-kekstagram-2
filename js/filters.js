@@ -16,20 +16,42 @@ let currentActive = filters.querySelector(`.${ACTIVE_FILTER_BUTTON}`);
 let currentFilterValue = Filters.DEFAULT;
 
 let pictures = [];
-let randomCache = [];
+let cachedRandomPhotos = [];
 
-function getRandomPhotos() {
-  if (randomCache.length === 0) {
-    randomCache = [...pictures]
+const getRandomPhotos = () => {
+  if (cachedRandomPhotos.length === 0) {
+    cachedRandomPhotos = [...pictures]
       .sort(() => Math.random() - 0.5)
       .slice(0, MAX_PICTURES_AMOUNT);
   }
-  return randomCache;
-}
+  return cachedRandomPhotos;
+};
+
+const applyFilter = () => {
+  if (currentFilterValue === currentFilter) {
+    return;
+  }
+  let filteredPictures = [];
+  switch (currentFilter) {
+    case Filters.DEFAULT:
+      filteredPictures = [...pictures];
+      cachedRandomPhotos = [];
+      break;
+    case Filters.RANDOM:
+      filteredPictures = getRandomPhotos();
+      break;
+    case Filters.DISCUSSED:
+      filteredPictures = [...pictures].sort((a, b) => b.comments.length - a.comments.length);
+      cachedRandomPhotos = [];
+      break;
+  }
+  currentFilterValue = currentFilter;
+  createThumbnails(filteredPictures);
+};
 
 const debounceApplyFilter = debounce(applyFilter);
 
-function onFilterClick(evt) {
+const onFilterClick = (evt) => {
   const targetButton = evt.target;
   if (!targetButton.matches('.img-filters__button')) {
     return;
@@ -42,36 +64,14 @@ function onFilterClick(evt) {
   targetButton.classList.add(ACTIVE_FILTER_BUTTON);
   currentFilter = targetButton.id;
   debounceApplyFilter();
-}
+};
 
-function applyFilter() {
-  if (currentFilterValue === currentFilter) {
-    return;
-  }
-  let filteredPictures = [];
-  switch (currentFilter) {
-    case Filters.DEFAULT:
-      filteredPictures = [...pictures];
-      randomCache = [];
-      break;
-    case Filters.RANDOM:
-      filteredPictures = getRandomPhotos();
-      break;
-    case Filters.DISCUSSED:
-      filteredPictures = [...pictures].sort((a, b) => b.comments.length - a.comments.length);
-      randomCache = [];
-      break;
-  }
-  currentFilterValue = currentFilter;
-  createThumbnails(filteredPictures);
-}
-
-function openFilters(picturesData) {
+const openFilters = (picturesData) => {
   filters.classList.remove('img-filters--inactive');
   filters.addEventListener('click', onFilterClick);
   pictures = picturesData;
-  randomCache = [];
+  cachedRandomPhotos = [];
   applyFilter();
-}
+};
 
 export { openFilters };

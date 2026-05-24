@@ -15,14 +15,11 @@ const SubmitButtonText = {
 
 const uploadForm = document.querySelector('.img-upload__form');
 const pageBody = document.querySelector('body');
-
 const uploadFileControl = uploadForm.querySelector('#upload-file');
 const photoEditorForm = uploadForm.querySelector('.img-upload__overlay');
 const resetPhotoEditorFormButton = uploadForm.querySelector('.img-upload__cancel');
-
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
-
 const decreaseScaleButton = uploadForm.querySelector('.scale__control--smaller');
 const increaseScaleButton = uploadForm.querySelector('.scale__control--bigger');
 const scaleValue = uploadForm.querySelector('.scale__control--value');
@@ -40,7 +37,13 @@ const scaleButtons = [
   { button: increaseScaleButton, direction: 1 }
 ];
 
-function onImageInput(file) {
+const pristine = new Pristine(uploadForm, {
+  classTo: 'img-upload__field-wrapper',
+  errorClass: 'img-upload__field-wrapper--error',
+  errorTextParent: 'img-upload__field-wrapper',
+});
+
+const onImageInput = (file) => {
   const fileName = file.name.toLowerCase();
   const matches = IMAGE_TYPES.some((item) => fileName.endsWith(item));
   if(!matches) {
@@ -53,14 +56,19 @@ function onImageInput(file) {
     item.style.backgroundImage = `url(${url})`;
   });
   return true;
-}
+};
 
-function onResetFormButtonClick(){
+const onResetFormButtonClick = () => {
   closePhotoEditorForm();
-}
+};
 
-function onDocumentKeyDown(evt) {
+const onDocumentKeyDown = (evt) => {
   if(isEscapeKey(evt)){
+    const isNotificationOpen = document.querySelector('.success') || document.querySelector('.error');
+    if(isNotificationOpen){
+      return;
+    }
+
     if(document.activeElement === hashtagInput || document.activeElement === commentInput){
       evt.stopPropagation();
     } else {
@@ -68,45 +76,35 @@ function onDocumentKeyDown(evt) {
       closePhotoEditorForm();
     }
   }
-}
+};
 
-function getNotificationElement() {
-  return document.querySelector('.success') || document.querySelector('.error');
-}
+const getNotificationElement = () => document.querySelector('.success') || document.querySelector('.error');
 
-function closeNotification() {
-  const notification = getNotificationElement();
-  if (!notification) {
-    return;
-  }
-  notification.remove();
-  pageBody.removeEventListener('click', onNotificationClick);
-  pageBody.removeEventListener('keydown', onNotificationKeydown);
-}
-
-function onNotificationClick(evt) {
+const onNotificationClick = (evt) => {
   const notification = getNotificationElement();
   if (!notification) {
     return;
   }
   const closeButton = notification.querySelector('button');
   if (evt.target === notification || evt.target === closeButton) {
+    evt.stopPropagation();
     closeNotification();
   }
-}
+};
 
-function onNotificationKeydown(evt) {
+const onNotificationKeydown = (evt) => {
   if (isEscapeKey(evt)) {
+    evt.stopPropagation();
     closeNotification();
   }
-}
+};
 
-function appendNotification(template) {
+const appendNotification = (template) => {
   const notificationNode = template.cloneNode(true);
   pageBody.append(notificationNode);
   pageBody.addEventListener('click', onNotificationClick);
   pageBody.addEventListener('keydown', onNotificationKeydown);
-}
+};
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;
@@ -118,23 +116,7 @@ const unblockSubmitButton = () => {
   submitButton.textContent = SubmitButtonText.IDLE;
 };
 
-const pristine = new Pristine(uploadForm, {
-  classTo: 'img-upload__field-wrapper',
-  errorClass: 'img-upload__field-wrapper--error',
-  errorTextParent: 'img-upload__field-wrapper',
-});
-
-function closePhotoEditorForm(){
-  photoEditorForm.classList.add('hidden');
-  pageBody.classList.remove('modal-open');
-  resetPhotoEditorFormButton.removeEventListener('click', onResetFormButtonClick);
-  document.removeEventListener('keydown', onDocumentKeyDown);
-  pristine.reset();
-  uploadForm.reset();
-  resetFilter();
-}
-
-function initUploadModal() {
+const initUploadModal = () => {
   uploadFileControl.addEventListener('change', () => {
     const file = uploadFileControl.files[0];
     if(!file){
@@ -153,9 +135,9 @@ function initUploadModal() {
     resetPhotoEditorFormButton.addEventListener('click', onResetFormButtonClick);
     document.addEventListener('keydown', onDocumentKeyDown);
   });
-}
+};
 
-function onScaleImage(direction) {
+const onScaleImage = (direction) => {
   const newValue = currentScaleValue + STEP * direction;
   if(newValue >= MIN_SCALE && newValue <= MAX_SCALE) {
     currentScaleValue = newValue;
@@ -164,13 +146,13 @@ function onScaleImage(direction) {
   uploadImagePreview.style.transform = `scale(${currentScaleValue / MAX_SCALE})`;
   decreaseScaleButton.disabled = (currentScaleValue === MIN_SCALE);
   increaseScaleButton.disabled = (currentScaleValue === MAX_SCALE);
-}
+};
 
-function onHashtagInput() {
+const onHashtagInput = () => {
   isHashtagValid(hashtagInput.value);
-}
+};
 
-function onFormSubmit(evt) {
+const onFormSubmit = (evt) => {
   evt.preventDefault();
   if(pristine.validate()) {
     hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
@@ -185,6 +167,26 @@ function onFormSubmit(evt) {
       })
       .finally(unblockSubmitButton);
   }
+};
+
+function closeNotification() {
+  const notification = getNotificationElement();
+  if (!notification) {
+    return;
+  }
+  notification.remove();
+  pageBody.removeEventListener('click', onNotificationClick);
+  pageBody.removeEventListener('keydown', onNotificationKeydown);
+}
+
+function closePhotoEditorForm(){
+  photoEditorForm.classList.add('hidden');
+  pageBody.classList.remove('modal-open');
+  resetPhotoEditorFormButton.removeEventListener('click', onResetFormButtonClick);
+  document.removeEventListener('keydown', onDocumentKeyDown);
+  pristine.reset();
+  uploadForm.reset();
+  resetFilter();
 }
 
 scaleButtons.forEach(({button, direction}) => {

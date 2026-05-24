@@ -3,7 +3,7 @@ import { initUploadModal } from './upload-photo-form.js';
 import { ErrorText, getData, showDataError } from './api.js';
 import { openFilters } from './filters.js';
 
-async function init() {
+const init = async () => {
   try {
     const data = await getData();
     createThumbnails(data);
@@ -12,6 +12,6 @@ async function init() {
     showDataError(ErrorText.GET_DATA);
   }
   initUploadModal();
-}
+};
 
 init();
