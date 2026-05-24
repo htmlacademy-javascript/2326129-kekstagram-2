@@ -4,7 +4,7 @@ const template = document.querySelector('#picture').content.querySelector('.pict
 const pictures = document.querySelector('.pictures');
 let currentPhotos = [];
 
-function createThumbnail (photo) {
+const createThumbnail = (photo) => {
   const thumbnail = template.cloneNode(true);
   thumbnail.dataset.id = photo.id;
   const picture = thumbnail.querySelector('.picture__img');
@@ -15,9 +15,9 @@ function createThumbnail (photo) {
   likes.textContent = photo.likes;
   comments.textContent = photo.comments.length;
   return thumbnail;
-}
+};
 
-function onPicturesClick(evt) {
+const onPicturesClick = (evt) => {
   const picture = evt.target.closest('.picture');
   if(picture) {
     const id = parseInt(picture.dataset.id, 10);
@@ -26,9 +26,9 @@ function onPicturesClick(evt) {
       openPopup(photo);
     }
   }
-}
+};
 
-function createThumbnails(photos) {
+const createThumbnails = (photos) => {
   pictures.querySelectorAll('.picture').forEach((el) => el.remove());
   currentPhotos = photos;
   const fragment = document.createDocumentFragment();
@@ -36,7 +36,7 @@ function createThumbnails(photos) {
     fragment.append(createThumbnail(image));
   });
   pictures.append(fragment);
-}
+};
 
 pictures.addEventListener('click', onPicturesClick);
 

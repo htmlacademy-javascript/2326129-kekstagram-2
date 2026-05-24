@@ -17,7 +17,7 @@ const uploadImagePreview = imageUploadWrapper.querySelector('.img-upload__previe
 
 let currentEffect = 'none';
 
-function updateSliderOptions(){
+const updateSliderOptions = () => {
   const options = EFFECTS[currentEffect];
   slider.noUiSlider.updateOptions({
     range: options.range,
@@ -25,14 +25,14 @@ function updateSliderOptions(){
     step: options.step
   });
   sliderContainer.classList.toggle('hidden', Boolean(options.hidden));
-}
+};
 
-function applyFilter(value) {
+const applyFilter = (value) => {
   const effect = EFFECTS[currentEffect];
   uploadImagePreview.style.filter = currentEffect === 'none' ? '' : effect.filter(value);
-}
+};
 
-function resetFilter(){
+const resetFilter = () => {
   currentEffect = 'none';
   uploadImagePreview.style.filter = '';
   sliderContainer.classList.add('hidden');
@@ -40,9 +40,9 @@ function resetFilter(){
     slider.noUiSlider.set(100);
     effectLevelInput.value = 100;
   }
-}
+};
 
-function onEffectChange() {
+const onEffectChange = () => {
   currentEffect = uploadForm['effect'].value;
   updateSliderOptions(currentEffect);
   if(currentEffect === 'none'){
@@ -51,7 +51,7 @@ function onEffectChange() {
   }
   const currentValue = slider.noUiSlider.get();
   applyFilter(currentValue);
-}
+};
 
 noUiSlider.create(slider, {
   range: {

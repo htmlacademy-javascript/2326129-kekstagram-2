@@ -10,20 +10,13 @@ const modalCommonCommentsAmount = modal.querySelector('.social__comment-total-co
 const messageInputField = modal.querySelector('.social__footer-text');
 const documentBody = document.body;
 
-function onDocumentKeydown() {
+const onDocumentKeydown = () => {
   if(isEscapeKey){
     closeBigImagePopup();
   }
-}
+};
 
-function closeBigImagePopup() {
-  clearComments();
-  modal.classList.add('hidden');
-  documentBody.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocumentKeydown);
-}
-
-function openPopup(currentImage){
+const openPopup = (currentImage) => {
   modalImage.src = currentImage.url;
   modalImage.alt = currentImage.description;
   modalLikes.textContent = currentImage.likes.toString();
@@ -40,6 +33,13 @@ function openPopup(currentImage){
     closeBigImagePopup();
   });
   document.addEventListener('keydown', onDocumentKeydown);
+};
+
+function closeBigImagePopup() {
+  clearComments();
+  modal.classList.add('hidden');
+  documentBody.classList.remove('modal-open');
+  document.removeEventListener('keydown', onDocumentKeydown);
 }
 
 messageInputField.addEventListener('keydown', (evt) => {

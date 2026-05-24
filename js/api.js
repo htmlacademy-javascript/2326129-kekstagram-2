@@ -18,7 +18,7 @@ const ErrorText = {
   SEND_INVALID_DATA: 'Выберите подходящий файл'
 };
 
-function showDataError(message) {
+const showDataError = (message) => {
   const errorMessage = errorTemplate.content.cloneNode(true).firstElementChild;
   const titleElement = errorMessage.querySelector('.data-error__title');
   titleElement.textContent = message;
@@ -26,27 +26,21 @@ function showDataError(message) {
   setTimeout(() => {
     errorMessage.remove();
   }, ERROR_MESSAGE_TIMEOUT);
-}
+};
 
-function load(route, errorText, method = Method.GET, body = null){
-  return fetch(`${BASE_URL}${route}`, {method, body})
-    .then((response) => {
-      if(!response.ok) {
-        throw new Error(errorText);
-      }
-      return response.json();
-    })
-    .catch((err) => {
-      throw err;
-    });
-}
+const load = (route, errorText, method = Method.GET, body = null) => fetch(`${BASE_URL}${route}`, {method, body})
+  .then((response) => {
+    if(!response.ok) {
+      throw new Error(errorText);
+    }
+    return response.json();
+  })
+  .catch((err) => {
+    throw err;
+  });
 
-function getData(){
-  return load(Routes.GET_DATA, ErrorText.GET_DATA);
-}
+const getData = () => load(Routes.GET_DATA, ErrorText.GET_DATA);
 
-function sendData(body){
-  return load(Routes.SEND_DATA, '', Method.POST, body);
-}
+const sendData = (body) => load(Routes.SEND_DATA, '', Method.POST, body);
 
 export { getData, sendData, showDataError, ErrorText };
